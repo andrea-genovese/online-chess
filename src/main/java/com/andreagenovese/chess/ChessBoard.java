@@ -1,5 +1,7 @@
 package main.java.com.andreagenovese.chess;
 
+import java.util.Set;
+
 public class ChessBoard {
     private Piece[][] board;
     private boolean isWhiteTurn,
@@ -9,11 +11,8 @@ public class ChessBoard {
             blackQueenCastling;
     private short halfMoves, moves;
 
-    public boolean execute(Mossa m) {
-        if (m == null)
-            return false;
-
-        return false;
+    public Piece[][] getBoard() {
+        return board;
     }
 
     public ChessBoard(String fen) {
@@ -77,17 +76,23 @@ public class ChessBoard {
         str += blackQueenCastling + "\n";
         str += "semimosse: " + halfMoves;
         str += "\nmosse: " + moves + '\n';
-        for (Piece[] row : board) {
+        for (int i = 0; i < 8; i++) {
+            Piece[] row = board[i];
+            str += i + 1 + " |";
             for (Piece piece : row) {
-                str += piece == null ? "  " : piece + " ";
+                str += piece == null ? "  " : " " + piece;
             }
             str += '\n';
         }
+        str+="-------------------\n  | a b c d e f g h";
         return str;
+
     }
 
     public static void main(String[] args) {
-        ChessBoard c = new ChessBoard("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2");
+        ChessBoard c = new ChessBoard("r1bq1b1r/ppp4p/4k1p1/3np3/1nB5/2N2Q2/PPPP1PPP/R1BK3R w - - 0 10");
+        Set<Move> mosse = c.board[7][7].getRookMoves();
         System.out.println(c);
+        System.out.println(mosse);
     }
 }

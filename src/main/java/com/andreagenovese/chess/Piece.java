@@ -1,5 +1,8 @@
 package main.java.com.andreagenovese.chess;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import main.java.com.andreagenovese.chess.Pieces.Bishop;
 import main.java.com.andreagenovese.chess.Pieces.King;
 import main.java.com.andreagenovese.chess.Pieces.Knight;
@@ -19,7 +22,6 @@ public abstract class Piece {
         this.column = column;
     }
 
-
     public static Piece fromChar(char c, ChessBoard board, byte row, byte column) {
         boolean isWhite = Character.isUpperCase(c);
         switch (c) {
@@ -38,5 +40,74 @@ public abstract class Piece {
             default:
                 throw new IllegalArgumentException(c + " is not a valid piece");
         }
+    }
+
+    public abstract Set<Move> getMoves();
+
+    private boolean shouldContinue(Set<Move> moves, byte r, byte c) {
+        Piece p = this.board.getBoard()[r][c];
+        if (p != null && p.isWhite == this.isWhite) {
+            return false;
+        }
+        moves.add(new Move(this, r, c));
+        if (p != null) {
+            return false;
+        }
+        return true;
+    }
+
+    protected Set<Move> getBishopMoves() {
+        Set<Move> moves = new HashSet<>();
+        // diagonale basso-destra
+        for (byte r = (byte) (row + 1), c = (byte) (column + 1); r < 8 && c < 8; r++, c++) {
+            if(!shouldContinue(moves, r, c)){
+                break;
+            }
+        }
+        //diagonale basso-sinistra
+        for (byte r = (byte) (row + 1), c = (byte) (column - 1); r < 8 && c < 8; r++, c--) {
+            if(!shouldContinue(moves, r, c)){
+                break;
+            }
+        }
+        //diagonale alto-destra
+        for (byte r = (byte) (row - 1), c = (byte) (column + 1); r < 8 && c < 8; r--, c++) {
+            if(!shouldContinue(moves, r, c)){
+                break;
+            }
+        }
+        //diagonale alto-sinistra
+        for (byte r = (byte) (row - 1), c = (byte) (column - 1); r < 8 && c < 8; r--, c--) {
+            if(!shouldContinue(moves, r, c)){
+                break;
+            }
+        }
+
+        return moves;
+    }
+
+    protected Set<Move> getRookMoves() {
+        Set<Move> moves = new HashSet<>();
+        // movimento verticale verso basso
+        for (byte i = (byte) (row + 1); i < 8; i++) {
+            if (!shouldContinue(moves, i, column))
+                break;
+        }
+        // movimento verticale verso alto
+        for (byte i = (byte) (row - 1); i >= 0; i--) {
+            if (!shouldContinue(moves, i, column))
+                break;
+        }
+        // movimento orizzontale verso destra
+        for (byte i = (byte) (column + 1); i < 8; i++) {
+            if (!shouldContinue(moves, row, i))
+                break;
+        }
+        // movimento orizzontale verso sinistra
+        for (byte i = (byte) (column - 1); i >= 0; i--) {
+            if (!shouldContinue(moves, row, i))
+                break;
+        }
+        return moves;
     }
 }
