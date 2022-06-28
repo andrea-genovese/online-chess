@@ -9,26 +9,32 @@ import main.java.com.andreagenovese.chess.Pieces.Rook;
 
 public abstract class Piece {
     protected boolean isWhite;
+    protected ChessBoard board;
+    protected byte row, column;
 
-    public Piece(boolean isWhite) {
+    public Piece(boolean isWhite, ChessBoard board, byte row, byte column) {
         this.isWhite = isWhite;
+        this.board = board;
+        this.row = row;
+        this.column = column;
     }
 
-    public static Piece fromChar(char c) {
+
+    public static Piece fromChar(char c, ChessBoard board, byte row, byte column) {
         boolean isWhite = Character.isUpperCase(c);
         switch (c) {
             case 'K', 'k':
-                return new King(isWhite);
+                return new King(isWhite, board, row, column);
             case 'Q', 'q':
-                return new Queen(isWhite);
+                return new Queen(isWhite, board, row, column);
             case 'R', 'r':
-                return new Rook(isWhite);
+                return new Rook(isWhite, board, row, column);
             case 'B', 'b':
-                return new Bishop(isWhite);
+                return new Bishop(isWhite, board, row, column);
             case 'N', 'n':
-                return new Knight(isWhite);
+                return new Knight(isWhite, board, row, column);
             case 'P', 'p':
-                return new Pawn(isWhite);
+                return new Pawn(isWhite, board, row, column);
             default:
                 throw new IllegalArgumentException(c + " is not a valid piece");
         }
