@@ -1,3 +1,3 @@
 package main.java.com.andreagenovese.chess;
 
-public record Square(byte row, byte column) {}
+public record Square(int row, int column) {}

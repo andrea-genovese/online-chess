@@ -1,6 +1,6 @@
 package main.java.com.andreagenovese.chess.Pieces;
 
-import java.util.List;
+import java.util.Set;
 
 import main.java.com.andreagenovese.chess.ChessBoard;
 import main.java.com.andreagenovese.chess.Move;
@@ -8,7 +8,7 @@ import main.java.com.andreagenovese.chess.Piece;
 
 public class Queen extends Piece {
 
-    public Queen(boolean isWhite, ChessBoard board, byte row, byte column) {
+    public Queen(boolean isWhite, ChessBoard board, int row, int column) {
         super(isWhite, board, row, column);
     }
 
@@ -18,8 +18,9 @@ public class Queen extends Piece {
     }
 
     @Override
-    public List<Move> getMoves() {
-        // TODO Auto-generated method stub
-        return null;
+    public Set<Move> getMoves() {
+        Set<Move> moves = getBishopMoves();
+        moves.addAll(getRookMoves());
+        return moves;
     }
 }

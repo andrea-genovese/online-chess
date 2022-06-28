@@ -91,7 +91,8 @@ public class ChessBoard {
 
     public static void main(String[] args) {
         ChessBoard c = new ChessBoard("r1bq1b1r/ppp4p/4k1p1/3np3/1nB5/2N2Q2/PPPP1PPP/R1BK3R w - - 0 10");
-        Set<Move> mosse = c.board[7][7].getRookMoves();
+        Set<Move> mosse = c.board[4][2].getMoves();
+
         System.out.println(c);
         System.out.println(mosse);
     }

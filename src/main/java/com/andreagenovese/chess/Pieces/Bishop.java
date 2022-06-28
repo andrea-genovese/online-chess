@@ -1,6 +1,6 @@
 package main.java.com.andreagenovese.chess.Pieces;
 
-import java.util.List;
+import java.util.Set;
 
 import main.java.com.andreagenovese.chess.ChessBoard;
 import main.java.com.andreagenovese.chess.Move;
@@ -8,7 +8,7 @@ import main.java.com.andreagenovese.chess.Piece;
 
 public class Bishop extends Piece {
 
-    public Bishop(boolean isWhite, ChessBoard board, byte row, byte column) {
+    public Bishop(boolean isWhite, ChessBoard board, int row, int column) {
         super(isWhite, board, row, column);
     }
     @Override
@@ -17,7 +17,7 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public List<Move> getMoves() {
+    public Set<Move> getMoves() {
         return getBishopMoves();
     }
 

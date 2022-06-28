@@ -1,6 +1,5 @@
 package main.java.com.andreagenovese.chess.Pieces;
 
-import java.util.List;
 import java.util.Set;
 
 import main.java.com.andreagenovese.chess.ChessBoard;
@@ -10,7 +9,7 @@ import main.java.com.andreagenovese.chess.Piece;
 public class Rook extends Piece {
 
     
-    public Rook(boolean isWhite, ChessBoard board, byte row, byte column) {
+    public Rook(boolean isWhite, ChessBoard board, int row, int column) {
         super(isWhite, board, row, column);
     }
     public Set<Move> getMoves(){

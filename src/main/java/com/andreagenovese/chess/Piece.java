@@ -13,16 +13,16 @@ import main.java.com.andreagenovese.chess.Pieces.Rook;
 public abstract class Piece {
     protected boolean isWhite;
     protected ChessBoard board;
-    protected byte row, column;
+    protected int row, column;
 
-    public Piece(boolean isWhite, ChessBoard board, byte row, byte column) {
+    public Piece(boolean isWhite, ChessBoard board, int row, int column) {
         this.isWhite = isWhite;
         this.board = board;
         this.row = row;
         this.column = column;
     }
 
-    public static Piece fromChar(char c, ChessBoard board, byte row, byte column) {
+    public static Piece fromChar(char c, ChessBoard board, int row, int column) {
         boolean isWhite = Character.isUpperCase(c);
         switch (c) {
             case 'K', 'k':
@@ -44,7 +44,7 @@ public abstract class Piece {
 
     public abstract Set<Move> getMoves();
 
-    private boolean shouldContinue(Set<Move> moves, byte r, byte c) {
+    private boolean shouldContinue(Set<Move> moves, int r, int c) {
         Piece p = this.board.getBoard()[r][c];
         if (p != null && p.isWhite == this.isWhite) {
             return false;
@@ -56,29 +56,41 @@ public abstract class Piece {
         return true;
     }
 
+    protected boolean addIfValid(Set<Move> moves, int r, int c) {
+        if (r < 0 || r > 7 || c < 0 || c > 7) {
+            return false;
+        }
+        Piece p = board.getBoard()[r][c];
+        if (p == null || p.isWhite != this.isWhite) {
+            moves.add(new Move(this, r, c));
+            return true;
+        }
+        return false;
+    }
+
     protected Set<Move> getBishopMoves() {
         Set<Move> moves = new HashSet<>();
         // diagonale basso-destra
-        for (byte r = (byte) (row + 1), c = (byte) (column + 1); r < 8 && c < 8; r++, c++) {
-            if(!shouldContinue(moves, r, c)){
+        for (int r = row + 1, c = column + 1; r < 8 && c < 8; r++, c++) {
+            if (!shouldContinue(moves, r, c)) {
                 break;
             }
         }
-        //diagonale basso-sinistra
-        for (byte r = (byte) (row + 1), c = (byte) (column - 1); r < 8 && c < 8; r++, c--) {
-            if(!shouldContinue(moves, r, c)){
+        // diagonale basso-sinistra
+        for (int r = row + 1, c = column - 1; r < 8 && c >= 0; r++, c--) {
+            if (!shouldContinue(moves, r, c)) {
                 break;
             }
         }
-        //diagonale alto-destra
-        for (byte r = (byte) (row - 1), c = (byte) (column + 1); r < 8 && c < 8; r--, c++) {
-            if(!shouldContinue(moves, r, c)){
+        // diagonale alto-destra
+        for (int r = row - 1, c = column + 1; r >= 0 && c < 8; r--, c++) {
+            if (!shouldContinue(moves, r, c)) {
                 break;
             }
         }
-        //diagonale alto-sinistra
-        for (byte r = (byte) (row - 1), c = (byte) (column - 1); r < 8 && c < 8; r--, c--) {
-            if(!shouldContinue(moves, r, c)){
+        // diagonale alto-sinistra
+        for (int r = row - 1, c = column - 1; r >= 0 && c >= 0; r--, c--) {
+            if (!shouldContinue(moves, r, c)) {
                 break;
             }
         }
@@ -89,22 +101,22 @@ public abstract class Piece {
     protected Set<Move> getRookMoves() {
         Set<Move> moves = new HashSet<>();
         // movimento verticale verso basso
-        for (byte i = (byte) (row + 1); i < 8; i++) {
+        for (int i = row + 1; i < 8; i++) {
             if (!shouldContinue(moves, i, column))
                 break;
         }
         // movimento verticale verso alto
-        for (byte i = (byte) (row - 1); i >= 0; i--) {
+        for (int i = row - 1; i >= 0; i--) {
             if (!shouldContinue(moves, i, column))
                 break;
         }
         // movimento orizzontale verso destra
-        for (byte i = (byte) (column + 1); i < 8; i++) {
+        for (int i = column + 1; i < 8; i++) {
             if (!shouldContinue(moves, row, i))
                 break;
         }
         // movimento orizzontale verso sinistra
-        for (byte i = (byte) (column - 1); i >= 0; i--) {
+        for (int i = column - 1; i >= 0; i--) {
             if (!shouldContinue(moves, row, i))
                 break;
         }
