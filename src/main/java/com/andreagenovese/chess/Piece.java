@@ -122,4 +122,7 @@ public abstract class Piece {
         }
         return moves;
     }
+    public boolean isWhite(){
+        return isWhite;
+    }
 }
