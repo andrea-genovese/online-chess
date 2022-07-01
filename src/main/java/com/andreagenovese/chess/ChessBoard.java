@@ -51,22 +51,38 @@ public class ChessBoard {
             return false;
         }
         // check if after the move the king is capturable
-        ChessBoard clone = clone();
-        clone.execute(m);
-        
-        return false;
+        ChessBoard clone = execute(m);
+        if (clone.someoneCanCapture(clone.getKing(toMove.isWhite()), !toMove.isWhite()))
+            return false;
+        return true;
     }
-    
 
-    private void execute(Move m) {
-        Piece p = getPiece(m.start());
+    public ChessBoard execute(Move m) {
+        Piece toMove = getPiece(m.start());
+        // check turn
+        if (toMove.isWhite() != isWhiteTurn) {
+            return null;
+        }
+        // check if the move is possible
+        if (!toMove.getMoves().contains(m)) {
+            return null;
+        }
+        ChessBoard clone = clone();
+        toMove = clone.getPiece(m.start());
+        m.execute(clone);
+
+
+        return clone;
     }
-    public Piece getPiece(Square s){
+
+    public Piece getPiece(Square s) {
         return board[s.row()][s.column()];
     }
-    public Piece getPiece(int r, int c){
+
+    public Piece getPiece(int r, int c) {
         return board[r][c];
     }
+
     public ChessBoard clone() {
         ChessBoard clone = new ChessBoard();
         clone.board = new Piece[board.length][board[0].length];
@@ -90,12 +106,12 @@ public class ChessBoard {
         return clone;
     }
 
-    private Piece getKing(boolean white) {
+    private Square getKing(boolean white) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Piece p = board[i][j];
-                if (p.getClass() == King.class && p.isWhite() == white) {
-                    return p;
+                if (p != null && p.getClass() == King.class && p.isWhite() == white) {
+                    return p.square();
                 }
             }
         }
@@ -106,16 +122,18 @@ public class ChessBoard {
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[0].length; column++) {
                 Piece p = board[row][column];
-                if (p!=null && p.isWhite() == color && p.canCapture(s)) {
+                if (p != null && p.isWhite() == color && p.canCapture(s)) {
                     return true;
                 }
             }
         }
         return false;
     }
+
     public boolean someoneCanCapture(int r, int c, boolean color) {
         return someoneCanCapture(new Square(r, c), color);
     }
+
     public ChessBoard(String fen) {
         String[] arr = fen.split(" ");
         String position = arr[0],
@@ -191,8 +209,8 @@ public class ChessBoard {
     }
 
     public static void main(String[] args) {
-        ChessBoard c = new ChessBoard("1k6/8/8/8/8/8/8/4K2R b K e4 0 1");
-		Set<Move> moves = c.getPiece(7, 4).getMoves();
+        ChessBoard c = new ChessBoard("1k6/8/8/8/8/8/3PPPPP/4K2R b kq e4 0 1");
+        Set<Move> moves = c.getPiece(7, 4).getMoves();
         System.out.println(moves);
     }
 }

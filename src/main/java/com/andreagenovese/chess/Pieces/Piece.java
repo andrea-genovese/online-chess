@@ -142,4 +142,8 @@ public abstract class Piece {
     public boolean isWhite() {
         return isWhite;
     }
+
+    public void square(Square square) {
+        this.square = square;
+    }
 }

@@ -1,7 +1,6 @@
 package com.andreagenovese.chess;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -107,7 +106,7 @@ class GetMovesTest {
 		assertEquals(expected, moves);
 	}
 	@Test
-	void castlingImpossible(){//there is a piece inbetween
+	void castlingImpossible(){//there is a piece in between
 		ChessBoard c = new ChessBoard("1k6/8/8/8/8/8/3PPPPP/4K1NR b K e4 0 1");
 		Set<Move> moves = c.getPiece(7, 4).getMoves();
 		Set<Move> expected = new HashSet<>();

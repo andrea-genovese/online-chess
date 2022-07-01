@@ -1,5 +1,7 @@
 package com.andreagenovese.chess;
 
+import com.andreagenovese.chess.Pieces.Piece;
+
 public class Move {
         protected Square start;
         protected Square dest;
@@ -53,6 +55,15 @@ public class Move {
 
         public String toString() {
                 return start.toString() + "->" + dest.toString();
+        }
+
+        public void execute(ChessBoard board) {
+                Piece[][] arr = board.getBoard();
+                Piece toMove = arr[start.row()][start.column()];
+                
+                arr[start.row()][start.column()] = null;
+                arr[dest.row()][dest.column()] = toMove;
+                toMove.square(dest);
         }
 
 
