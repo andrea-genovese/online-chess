@@ -57,7 +57,7 @@ public class Pawn extends Piece {
         }
         // enpassant
         Square enPassant = board.getEnPassant();
-        if (Math.abs(enPassant.column() - column) == 1 && enPassant.row() == nextRow) {
+        if (enPassant != null && Math.abs(enPassant.column() - column) == 1 && enPassant.row() == nextRow) {
             moves.add(new EnPassant(this.square, enPassant));
         }
         return moves;
@@ -65,7 +65,7 @@ public class Pawn extends Piece {
 
     protected void addMove(Set<Move> moves, int r, int c) {
         int lastRow = isWhite ? 0 : 7;
-        Piece p = board.getPiece(r,c);
+        Piece p = board.getPiece(r, c);
         if (p != null && p.isWhite == this.isWhite) {
             return;
         }

@@ -106,7 +106,7 @@ public class ChessBoard {
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[0].length; column++) {
                 Piece p = board[row][column];
-                if (p.isWhite() == color && p.canCapture(s)) {
+                if (p!=null && p.isWhite() == color && p.canCapture(s)) {
                     return true;
                 }
             }
@@ -191,10 +191,8 @@ public class ChessBoard {
     }
 
     public static void main(String[] args) {
-        ChessBoard c = new ChessBoard("rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3");
-        Set<Move> mosse = c.board[3][4].getMoves();
-
-        System.out.println(c);
-        System.out.println(mosse);
+        ChessBoard c = new ChessBoard("1k6/8/8/8/8/8/8/4K2R b K e4 0 1");
+		Set<Move> moves = c.getPiece(7, 4).getMoves();
+        System.out.println(moves);
     }
 }

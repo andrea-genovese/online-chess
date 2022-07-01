@@ -1,8 +1,8 @@
 package com.andreagenovese.chess;
 
 public class Move {
-        private Square start;
-        private Square dest;
+        protected Square start;
+        protected Square dest;
 
         public Move(int startRow, int startColumn, int destRow, int destColumn) {
                 this(new Square(startRow, startColumn), new Square(destRow, destColumn));
@@ -35,7 +35,7 @@ public class Move {
                         return true;
                 if (obj == null)
                         return false;
-                if (!(obj instanceof Move))
+                if (obj.getClass() != getClass())
                         return false;
                 Move other = (Move) obj;
                 if (dest == null) {
