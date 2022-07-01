@@ -1,26 +1,28 @@
-package main.java.com.andreagenovese.chess;
+package com.andreagenovese.chess.Pieces;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import main.java.com.andreagenovese.chess.Pieces.Bishop;
-import main.java.com.andreagenovese.chess.Pieces.King;
-import main.java.com.andreagenovese.chess.Pieces.Knight;
-import main.java.com.andreagenovese.chess.Pieces.Pawn;
-import main.java.com.andreagenovese.chess.Pieces.Queen;
-import main.java.com.andreagenovese.chess.Pieces.Rook;
+import com.andreagenovese.chess.ChessBoard;
+import com.andreagenovese.chess.Move;
+import com.andreagenovese.chess.Square;
 
 public abstract class Piece {
     protected boolean isWhite;
     protected ChessBoard board;
-    protected int row, column;
+    protected Square square;
 
-    public Piece(boolean isWhite, ChessBoard board, int row, int column) {
+    public Piece(boolean isWhite, ChessBoard board, Square square) {
         this.isWhite = isWhite;
         this.board = board;
-        this.row = row;
-        this.column = column;
+        this.square = square;
     }
+
+    public Piece(boolean isWhite, ChessBoard board, int row, int column) {
+        this(isWhite, board, new Square(row, column));
+    }
+
+    public abstract Piece clone(ChessBoard board);
 
     public static Piece fromChar(char c, ChessBoard board, int row, int column) {
         boolean isWhite = Character.isUpperCase(c);
@@ -44,12 +46,21 @@ public abstract class Piece {
 
     public abstract Set<Move> getMoves();
 
+    public boolean canCapture(Square s) {
+        return getMoves().contains(new Move(square, s));
+    }
+
+    public Square square() {
+        return square;
+    }
+
     private boolean shouldContinue(Set<Move> moves, int r, int c) {
-        Piece p = this.board.getBoard()[r][c];
+
+        Piece p = this.board.getPiece(r, c);
         if (p != null && p.isWhite == this.isWhite) {
             return false;
         }
-        moves.add(new Move(this, r, c));
+        moves.add(new Move(this.square, r, c));
         if (p != null) {
             return false;
         }
@@ -57,12 +68,13 @@ public abstract class Piece {
     }
 
     protected boolean addIfValid(Set<Move> moves, int r, int c) {
-        if (r < 0 || r > 7 || c < 0 || c > 7) {
+        Square dest = new Square(r, c);
+        if (!dest.doesExists()) {
             return false;
         }
-        Piece p = board.getBoard()[r][c];
+        Piece p = board.getPiece(dest);
         if (p == null || p.isWhite != this.isWhite) {
-            moves.add(new Move(this, r, c));
+            moves.add(new Move(this.square, dest));
             return true;
         }
         return false;
@@ -70,6 +82,8 @@ public abstract class Piece {
 
     protected Set<Move> getBishopMoves() {
         Set<Move> moves = new HashSet<>();
+        int row = this.square.row();
+        int column = this.square.column();
         // diagonale basso-destra
         for (int r = row + 1, c = column + 1; r < 8 && c < 8; r++, c++) {
             if (!shouldContinue(moves, r, c)) {
@@ -100,6 +114,8 @@ public abstract class Piece {
 
     protected Set<Move> getRookMoves() {
         Set<Move> moves = new HashSet<>();
+        int row = this.square.row();
+        int column = this.square.column();
         // movimento verticale verso basso
         for (int i = row + 1; i < 8; i++) {
             if (!shouldContinue(moves, i, column))
@@ -122,7 +138,8 @@ public abstract class Piece {
         }
         return moves;
     }
-    public boolean isWhite(){
+
+    public boolean isWhite() {
         return isWhite;
     }
 }

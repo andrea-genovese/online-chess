@@ -1,24 +1,59 @@
-package main.java.com.andreagenovese.chess;
+package com.andreagenovese.chess;
 
-public record Move(
-                Piece piece,
-                Square dest,
-                Class<? extends Piece> promotion) {
-        public Move(Piece piece, int destRow, int destColumn) {
-                this(piece, new Square(destRow, destColumn), null);
+public class Move {
+        private Square start;
+        private Square dest;
+
+        public Move(int startRow, int startColumn, int destRow, int destColumn) {
+                this(new Square(startRow, startColumn), new Square(destRow, destColumn));
+
         }
 
-        public Move(Piece piece, int destRow, int destColumn, Class<? extends Piece> promotion) {
-                this(piece, new Square(destRow, destColumn), promotion);
+        public Move(Square start, Square dest) {
+                this.start = start;
+                this.dest = dest;
+        }
+        public Move(Square start, int destRow, int destColumn) {
+                this(start, new Square(destRow, destColumn));
+        }
+        public Square start(){
+                return start;
+        }
+        
+        @Override
+        public int hashCode() {
+                final int prime = 31;
+                int result = 1;
+                result = prime * result + ((dest == null) ? 0 : dest.hashCode());
+                result = prime * result + ((start == null) ? 0 : start.hashCode());
+                return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+                if (this == obj)
+                        return true;
+                if (obj == null)
+                        return false;
+                if (!(obj instanceof Move))
+                        return false;
+                Move other = (Move) obj;
+                if (dest == null) {
+                        if (other.dest != null)
+                                return false;
+                } else if (!dest.equals(other.dest))
+                        return false;
+                if (start == null) {
+                        if (other.start != null)
+                                return false;
+                } else if (!start.equals(other.start))
+                        return false;
+                return true;
         }
 
         public String toString() {
-                char column = (char) (dest.column() + 'a');
-                int row = 8 - dest.row();
-                String str = piece.toString() + column + row;
-                if (promotion != null) {
-                        str += "=" + promotion.getSimpleName();
-                }
-                return str;
+                return start.toString() + "->" + dest.toString();
         }
+
+
 }

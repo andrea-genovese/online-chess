@@ -1,18 +1,23 @@
-package main.java.com.andreagenovese.chess.Pieces;
+package com.andreagenovese.chess.Pieces;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import main.java.com.andreagenovese.chess.ChessBoard;
-import main.java.com.andreagenovese.chess.Move;
-import main.java.com.andreagenovese.chess.Piece;
+import com.andreagenovese.chess.ChessBoard;
+import com.andreagenovese.chess.Move;
+import com.andreagenovese.chess.Square;
 
 public class Knight extends Piece {
 
     public Knight(boolean isWhite, ChessBoard board, int row, int column) {
         super(isWhite, board, row, column);
     }
-
+    public Knight(boolean isWhite, ChessBoard board, Square square) {
+        super(isWhite, board, square);
+    }
+    public Knight clone(ChessBoard board){
+        return new Knight(isWhite, board,square);
+    }
     @Override
     public String toString() {
         return isWhite ? "N" : "n";
@@ -21,6 +26,8 @@ public class Knight extends Piece {
     @Override
     public Set<Move> getMoves() {
         Set<Move> moves = new HashSet<>();
+        int row = this.square.row();
+        int column = this.square.column();
         addIfValid(moves, row - 1, column - 2);
         addIfValid(moves, row - 2, column - 1);
         addIfValid(moves, row - 2, column + 1);

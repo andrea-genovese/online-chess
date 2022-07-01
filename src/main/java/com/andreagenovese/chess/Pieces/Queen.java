@@ -1,17 +1,21 @@
-package main.java.com.andreagenovese.chess.Pieces;
+package com.andreagenovese.chess.Pieces;
 
 import java.util.Set;
 
-import main.java.com.andreagenovese.chess.ChessBoard;
-import main.java.com.andreagenovese.chess.Move;
-import main.java.com.andreagenovese.chess.Piece;
+import com.andreagenovese.chess.ChessBoard;
+import com.andreagenovese.chess.Move;
+import com.andreagenovese.chess.Square;
 
 public class Queen extends Piece {
-
     public Queen(boolean isWhite, ChessBoard board, int row, int column) {
         super(isWhite, board, row, column);
     }
-
+    public Queen(boolean isWhite, ChessBoard board, Square square) {
+        super(isWhite, board, square);
+    }
+    public Queen clone(ChessBoard board){
+        return new Queen(isWhite, board, square);
+    }
     @Override
     public String toString() {
         return isWhite ? "Q" : "q";

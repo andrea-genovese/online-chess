@@ -1,17 +1,26 @@
-package main.java.com.andreagenovese.chess.Pieces;
+package com.andreagenovese.chess.Pieces;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import main.java.com.andreagenovese.chess.ChessBoard;
-import main.java.com.andreagenovese.chess.Move;
-import main.java.com.andreagenovese.chess.Piece;
-import main.java.com.andreagenovese.chess.Square;
+import com.andreagenovese.chess.ChessBoard;
+import com.andreagenovese.chess.EnPassant;
+import com.andreagenovese.chess.Move;
+import com.andreagenovese.chess.Promotion;
+import com.andreagenovese.chess.Square;
 
 public class Pawn extends Piece {
 
     public Pawn(boolean isWhite, ChessBoard board, int row, int column) {
         super(isWhite, board, row, column);
+    }
+
+    public Pawn(boolean isWhite, ChessBoard board, Square square) {
+        super(isWhite, board, square);
+    }
+
+    public Pawn clone(ChessBoard board) {
+        return new Pawn(isWhite, board, square);
     }
 
     @Override
@@ -22,6 +31,8 @@ public class Pawn extends Piece {
     @Override
     public Set<Move> getMoves() {
         Set<Move> moves = new HashSet<>();
+        int row = this.square.row();
+        int column = this.square.column();
         int start = isWhite ? 6 : 1;
         int nextRow = isWhite ? row - 1 : row + 1;
         int secondRow = isWhite ? row - 2 : row + 2;
@@ -39,27 +50,32 @@ public class Pawn extends Piece {
         if (column - 1 >= 0 && board.getBoard()[nextRow][column - 1] != null) {
             addMove(moves, nextRow, column - 1);
         }
+
         // capture right
         if (column + 1 < 8 && board.getBoard()[nextRow][column + 1] != null) {
             addMove(moves, nextRow, column + 1);
         }
-
+        // enpassant
+        Square enPassant = board.getEnPassant();
+        if (Math.abs(enPassant.column() - column) == 1 && enPassant.row() == nextRow) {
+            moves.add(new EnPassant(this.square, enPassant));
+        }
         return moves;
     }
 
     protected void addMove(Set<Move> moves, int r, int c) {
         int lastRow = isWhite ? 0 : 7;
-        Piece p = board.getBoard()[r][c];
-        if (p != null && p.isWhite() == this.isWhite) {
+        Piece p = board.getPiece(r,c);
+        if (p != null && p.isWhite == this.isWhite) {
             return;
         }
         if (r == lastRow) {
-            moves.add(new Move(this, r, c, Queen.class));
-            moves.add(new Move(this, r, c, Rook.class));
-            moves.add(new Move(this, r, c, Bishop.class));
-            moves.add(new Move(this, r, c, Knight.class));
+            moves.add(new Promotion(this.square, r, c, Queen.class));
+            moves.add(new Promotion(this.square, r, c, Rook.class));
+            moves.add(new Promotion(this.square, r, c, Bishop.class));
+            moves.add(new Promotion(this.square, r, c, Knight.class));
         } else {
-            moves.add(new Move(this, r, c));
+            moves.add(new Move(this.square, r, c));
         }
     }
 }
