@@ -3,8 +3,8 @@ package com.andreagenovese.chess.Pieces;
 import java.util.Set;
 
 import com.andreagenovese.chess.ChessBoard;
-import com.andreagenovese.chess.Move;
 import com.andreagenovese.chess.Square;
+import com.andreagenovese.chess.Moves.Move;
 
 public class Queen extends Piece {
     public Queen(boolean isWhite, ChessBoard board, int row, int column) {

@@ -3,10 +3,10 @@ package com.andreagenovese.chess.Pieces;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.andreagenovese.chess.Castling;
 import com.andreagenovese.chess.ChessBoard;
-import com.andreagenovese.chess.Move;
 import com.andreagenovese.chess.Square;
+import com.andreagenovese.chess.Moves.Castling;
+import com.andreagenovese.chess.Moves.Move;
 
 public class King extends Piece {
     public King(boolean isWhite, ChessBoard board, int row, int column) {
@@ -40,12 +40,13 @@ public class King extends Piece {
         boolean kingSide = isWhite ? board.whiteKingCastling() : board.blackKingCastling();
         boolean queenSide = isWhite ? board.whiteQueenCastling() : board.blackQueenCastling();
         int castleRow = isWhite ? 7 : 0;
-
+        //TODO controllare prima di arroccare di non essere sotto scacco
+        //TODO impedire ricorsione infinita di someOneCanCapture
         if (kingSide &&
                 board.getPiece(castleRow, 5) == null &&
                 board.getPiece(castleRow, 6) == null &&
-                !board.someoneCanCapture(castleRow, 5, !isWhite) &&
-                !board.someoneCanCapture(castleRow, 6, !isWhite)) {
+                !board.someoneCanCaptureNoKing(castleRow, 5, !isWhite) &&
+                !board.someoneCanCaptureNoKing(castleRow, 6, !isWhite)) {
             moves.add(new Castling(this.square, castleRow, 6));
         }
         if (queenSide &&

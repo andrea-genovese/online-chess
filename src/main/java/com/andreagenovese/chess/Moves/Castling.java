@@ -1,4 +1,7 @@
-package com.andreagenovese.chess;
+package com.andreagenovese.chess.Moves;
+
+import com.andreagenovese.chess.ChessBoard;
+import com.andreagenovese.chess.Square;
 
 public class Castling extends Move {
 
@@ -9,15 +12,21 @@ public class Castling extends Move {
     public Castling(Square square, int destRow, int destColumn) {
         super(square, destRow, destColumn);
     }
-
+    @Override
+    public boolean isCapture(ChessBoard board) {     
+        return false;
+    }
+    
     @Override
     public void execute(ChessBoard board) {
         boolean isKingSide = dest.column() == 6;
+        boolean isWhite = dest.row() == 7;
         Square rookSquare = new Square(start.row(), isKingSide ? 7 : 0);
         Square rookDest = new Square(start.row(), isKingSide ? 5 : 3);
-
         board.move(start, dest);
         board.move(rookSquare, rookDest);
+        board.removeCastling(isWhite);
+        board.setHalfMoves((short) (board.getHalfMoves() + 1));
     }
 
     @Override

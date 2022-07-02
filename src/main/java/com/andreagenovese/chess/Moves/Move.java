@@ -1,5 +1,7 @@
-package com.andreagenovese.chess;
+package com.andreagenovese.chess.Moves;
 
+import com.andreagenovese.chess.ChessBoard;
+import com.andreagenovese.chess.Square;
 import com.andreagenovese.chess.Pieces.Pawn;
 import com.andreagenovese.chess.Pieces.Piece;
 
@@ -21,8 +23,16 @@ public class Move {
                 this(start, new Square(destRow, destColumn));
         }
 
+        public Move(String start, String dest) {
+                this(Square.fromString(start), Square.fromString(dest));
+        }
+
         public Square start() {
                 return start;
+        }
+
+        public boolean isCapture(ChessBoard board) {
+                return board.getPiece(dest) != null;
         }
 
         @Override
@@ -66,7 +76,7 @@ public class Move {
                 if (p instanceof Pawn && Math.abs(start.row() - dest.row()) == 2) {
                         Square enPassant = new Square(start.row() + (p.isWhite() ? -1 : 1), start.column());
                         board.setEnpassant(enPassant);
-                } else{
+                } else {
                         board.setEnpassant(null);
                 }
                 board.move(p, dest);

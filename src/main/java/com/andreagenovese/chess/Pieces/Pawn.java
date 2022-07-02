@@ -4,10 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.andreagenovese.chess.ChessBoard;
-import com.andreagenovese.chess.EnPassant;
-import com.andreagenovese.chess.Move;
-import com.andreagenovese.chess.Promotion;
 import com.andreagenovese.chess.Square;
+import com.andreagenovese.chess.Moves.EnPassant;
+import com.andreagenovese.chess.Moves.Move;
+import com.andreagenovese.chess.Moves.Promotion;
 
 public class Pawn extends Piece {
 

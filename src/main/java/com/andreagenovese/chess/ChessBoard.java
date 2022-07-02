@@ -3,8 +3,11 @@ package com.andreagenovese.chess;
 import java.util.Arrays;
 import java.util.Objects;
 
+import com.andreagenovese.chess.Moves.Move;
+import com.andreagenovese.chess.Moves.Promotion;
 import com.andreagenovese.chess.Pieces.King;
 import com.andreagenovese.chess.Pieces.Piece;
+import com.andreagenovese.chess.Pieces.Queen;
 
 public class ChessBoard {
     public static final String INITIAL_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -24,7 +27,33 @@ public class ChessBoard {
     public Square getEnPassant() {
         return enPassant;
     }
-
+    public void setHalfMoves(short halfMoves){
+        this.halfMoves = halfMoves;
+    }
+    public void removeCastling(boolean color, boolean kingSide) {
+        if (color) {
+            if (kingSide) {
+                whiteKingCastling = false;
+            } else {
+                whiteQueenCastling = false;
+            }
+        } else {
+            if (kingSide) {
+                blackKingCastling = false;
+            } else {
+                blackQueenCastling = false;
+            }
+        }
+    }
+    public void removeCastling(boolean color) {
+        if(color) {
+            whiteKingCastling = false;
+            whiteQueenCastling = false;
+        } else {
+            blackKingCastling = false;
+            blackQueenCastling = false;
+        }
+    }
     public boolean whiteKingCastling() {
         return whiteKingCastling;
     }
@@ -59,7 +88,7 @@ public class ChessBoard {
             clone.moves++;
         }
 
-        if (clone.someoneCanCapture(clone.getKing(toMove.isWhite()), toMove.isWhite())) {
+        if (clone.someoneCanCapture(clone.getKing(toMove.isWhite()), !toMove.isWhite())) {
             return null;
         }
         return clone;
@@ -116,6 +145,19 @@ public class ChessBoard {
             }
         }
         return null;
+    }
+
+    public boolean someoneCanCaptureNoKing(int r, int c, boolean color) {
+        Square s = new Square(r, c);
+        for (int row = 0; row < board.length; row++) {
+            for (int column = 0; column < board[0].length; column++) {
+                Piece p = board[row][column];
+                if (p != null && p.isWhite() == color && !(p instanceof King) && p.canCapture(s)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public boolean someoneCanCapture(Square s, boolean color) {
@@ -188,7 +230,7 @@ public class ChessBoard {
     public String toString() {
         String str = "Turno: ";
         str += isWhiteTurn ? "bianco" : "nero";
-        str += "\nenPassant: "+enPassant;
+        str += "\nenPassant: " + enPassant;
         str += "\n arrocco: ";
         str += whiteKingCastling + "\n";
         str += whiteQueenCastling + "\n";
@@ -259,14 +301,19 @@ public class ChessBoard {
     }
 
     public static void main(String[] args) {
-        ChessBoard c = new ChessBoard("1k6/8/8/8/3pP3/8/8/2K5 b - e3 0 1");
-		c.execute(new EnPassant(4, 3, 5, 4));
-        
-        boolean b = Objects.equals(new ChessBoard("1k6/8/8/8/8/4p3/8/2K5 w - - 0 2"), c);
+        ChessBoard c = new ChessBoard("1k6/7P/8/8/8/8/8/2K5 w - - 0 1");
+        c = c.execute(new Promotion(1, 7, 0, 7, Queen.class));
+
+        boolean b = Objects.equals(new ChessBoard("1k5Q/8/8/8/8/8/8/2K5 b - - 0 1"), c);
         System.out.println(b);
     }
 
     public void setEnpassant(Square square) {
         this.enPassant = square;
     }
+
+    public short getHalfMoves() {
+        return halfMoves;
+    }
+
 }

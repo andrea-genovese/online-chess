@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.andreagenovese.chess.ChessBoard;
-import com.andreagenovese.chess.Move;
 import com.andreagenovese.chess.Square;
+import com.andreagenovese.chess.Moves.Move;
 
 public abstract class Piece {
     protected boolean isWhite;

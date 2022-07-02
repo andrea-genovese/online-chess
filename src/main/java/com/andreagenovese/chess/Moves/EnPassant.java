@@ -1,5 +1,7 @@
-package com.andreagenovese.chess;
+package com.andreagenovese.chess.Moves;
 
+import com.andreagenovese.chess.ChessBoard;
+import com.andreagenovese.chess.Square;
 import com.andreagenovese.chess.Pieces.Piece;
 
 public class EnPassant extends Move {
@@ -15,6 +17,7 @@ public class EnPassant extends Move {
     public void execute(ChessBoard board){
         board.move(start,dest);
         board.setEnpassant(null);
+        board.setHalfMoves((short)0);
         Piece[][] arr = board.getBoard();
         arr[start.row()][dest.column()] = null;
     }

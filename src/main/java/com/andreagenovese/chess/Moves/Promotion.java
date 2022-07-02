@@ -1,7 +1,9 @@
-package com.andreagenovese.chess;
+package com.andreagenovese.chess.Moves;
 
 import java.lang.reflect.Constructor;
 
+import com.andreagenovese.chess.ChessBoard;
+import com.andreagenovese.chess.Square;
 import com.andreagenovese.chess.Pieces.Piece;
 
 public class Promotion extends Move {
@@ -16,17 +18,22 @@ public class Promotion extends Move {
         super(startRow, startColumn, destRow, destColumn);
         this.promotion = promotion;
     }
+    @Override
+    public boolean isCapture(ChessBoard board) {
+        return true;
+    }
 
     public void execute(ChessBoard board) {
         Piece[][] arr = board.getBoard();
         Piece toMove = arr[start.row()][start.column()];
 
         try {
-            Constructor<? extends Piece> constructor = promotion.getConstructor(Square.class, ChessBoard.class,
-                    boolean.class);
-            Piece p = constructor.newInstance(dest, board, toMove.isWhite());
+            Constructor<? extends Piece> constructor = promotion.getConstructor(boolean.class, ChessBoard.class,
+                    Square.class);
+            Piece p = constructor.newInstance(toMove.isWhite(), board, dest);
             arr[dest.row()][dest.column()] = p;
             arr[start.row()][start.column()] = null;
+            board.setHalfMoves((short) 0);
         } catch (Exception e) {
             e.printStackTrace();
         }

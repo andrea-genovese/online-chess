@@ -8,6 +8,10 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.andreagenovese.chess.Moves.Castling;
+import com.andreagenovese.chess.Moves.EnPassant;
+import com.andreagenovese.chess.Moves.Move;
+import com.andreagenovese.chess.Moves.Promotion;
 import com.andreagenovese.chess.Pieces.Bishop;
 import com.andreagenovese.chess.Pieces.Knight;
 import com.andreagenovese.chess.Pieces.Queen;
