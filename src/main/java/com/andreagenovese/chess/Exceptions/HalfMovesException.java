@@ -1,5 +1,5 @@
 package com.andreagenovese.chess.Exceptions;
 
-public class HalfMovesException extends Exception{
+public class HalfMovesException extends RuntimeException{
 
 }

@@ -1,6 +1,7 @@
 package com.andreagenovese.chess;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -135,5 +136,10 @@ class GetMovesTest {
 		expected.add(new Move(7, 4, 7, 5));
 		expected.add(new Move(7, 4, 7, 3));
 		assertEquals(expected, moves);
+	}
+	@Test
+	void canCapture(){
+		ChessBoard c = new ChessBoard("2kn4/2P5/8/2K5/8/8/8/8 w - - 0 1");
+		assertTrue(c.getPiece(1,2).canCapture(new Square(0,3)));
 	}
 }

@@ -1,18 +1,20 @@
 package com.andreagenovese.chess;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import com.andreagenovese.chess.Exceptions.CheckMateException;
-import com.andreagenovese.chess.Exceptions.StaleMateException;
 import com.andreagenovese.chess.Exceptions.HalfMovesException;
+import com.andreagenovese.chess.Exceptions.InsufficientMaterialException;
+import com.andreagenovese.chess.Exceptions.StaleMateException;
 import com.andreagenovese.chess.Moves.Move;
-import com.andreagenovese.chess.Moves.Promotion;
+import com.andreagenovese.chess.Pieces.Bishop;
 import com.andreagenovese.chess.Pieces.King;
+import com.andreagenovese.chess.Pieces.Knight;
+import com.andreagenovese.chess.Pieces.Pawn;
 import com.andreagenovese.chess.Pieces.Piece;
 import com.andreagenovese.chess.Pieces.Queen;
+import com.andreagenovese.chess.Pieces.Rook;
 
 public class ChessBoard {
     public static final String INITIAL_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -79,9 +81,34 @@ public class ChessBoard {
         return blackQueenCastling;
     }
 
-    private boolean isGameOver() throws StaleMateException, CheckMateException, HalfMovesException {
-        if(halfMoves >= 50) {
+    private boolean isMaterialSufficient(boolean color) {
+        byte lightPieces = 0;
+        for (Piece[] row : board) {
+            for (Piece p : row) {
+                if (p == null || p.isWhite() != color) {
+                    continue;
+                }
+                if (p instanceof Queen || p instanceof Rook || p instanceof Pawn) {
+                    return true;
+                }
+                if (p instanceof Bishop || p instanceof Knight) {
+                    lightPieces++;
+                }
+            }
+        }
+        return lightPieces >= 2;
+            
+    }
+    private boolean isMaterialSufficient() {
+        return isMaterialSufficient(true) || isMaterialSufficient(false);
+            
+    }
+    boolean isGameOver() {
+        if (halfMoves >= 50) {
             throw new HalfMovesException();
+        }
+        if (!isMaterialSufficient()) {
+            throw new InsufficientMaterialException();
         }
         for (Piece[] row : board) {
             for (Piece p : row) {
@@ -89,22 +116,22 @@ public class ChessBoard {
                     continue;
                 }
                 Set<Move> moves = p.getMoves();
-                for(Move m : moves) {
+                for (Move m : moves) {
                     ChessBoard clone = clone();
-                    if(clone.execute(m) != null){
+                    if (clone.execute(m) != null) {
                         return false;
                     }
                 }
             }
         }
-        if(someoneCanCapture(getKing(isWhiteTurn), !isWhiteTurn)){
+        if (someoneCanCapture(getKing(isWhiteTurn), !isWhiteTurn)) {
             throw new CheckMateException(!isWhiteTurn);
-        } else{
+        } else {
             throw new StaleMateException();
         }
     }
 
-    public ChessBoard execute(Move m) {
+    public ChessBoard execute(Move m) throws StaleMateException, CheckMateException, HalfMovesException {
         Piece toMove = getPiece(m.start());
         // check turn
         if (toMove.isWhite() != isWhiteTurn) {
@@ -333,15 +360,7 @@ public class ChessBoard {
             return false;
         return true;
     }
-
-    public static void main(String[] args) {
-        ChessBoard c = new ChessBoard("1k6/7P/8/8/8/8/8/2K5 w - - 0 1");
-        c = c.execute(new Promotion(1, 7, 0, 7, Queen.class));
-
-        boolean b = Objects.equals(new ChessBoard("1k5Q/8/8/8/8/8/8/2K5 b - - 0 1"), c);
-        System.out.println(b);
-    }
-
+    
     public void setEnpassant(Square square) {
         this.enPassant = square;
     }

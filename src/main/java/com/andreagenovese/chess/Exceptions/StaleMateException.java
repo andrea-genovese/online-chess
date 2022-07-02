@@ -1,5 +1,5 @@
 package com.andreagenovese.chess.Exceptions;
 
-public class StaleMateException extends Exception{
+public class StaleMateException extends RuntimeException{
     
 }

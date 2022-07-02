@@ -14,6 +14,11 @@ public class Promotion extends Move {
         this.promotion = promotion;
     }
 
+    public Promotion(String start, String dest, Class<? extends Piece> promotion) {
+        super(start, dest);
+        this.promotion = promotion;
+    }
+
     public Promotion(int startRow, int startColumn, int destRow, int destColumn, Class<? extends Piece> promotion) {
         super(startRow, startColumn, destRow, destColumn);
         this.promotion = promotion;

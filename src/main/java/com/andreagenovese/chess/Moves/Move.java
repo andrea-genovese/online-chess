@@ -32,7 +32,10 @@ public class Move {
 	public Square start() {
 		return start;
 	}
-
+	public Square dest() {
+		return dest;
+	}
+	
 	public boolean isCapture(ChessBoard board) {
 		return board.getPiece(dest) != null;
 	}

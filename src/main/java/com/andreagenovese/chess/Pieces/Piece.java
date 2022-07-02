@@ -57,7 +57,13 @@ public abstract class Piece {
     public abstract Set<Move> getMoves();
 
     public boolean canCapture(Square s) {
-        return getMoves().contains(new Move(square, s));
+        Set<Move> moves = getMoves();
+        for (Move m : moves) {
+            if (s.equals(m.dest())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Square square() {
@@ -184,5 +190,5 @@ public abstract class Piece {
             return false;
         return true;
     }
-    
+
 }
