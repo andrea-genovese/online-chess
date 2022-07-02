@@ -97,12 +97,14 @@ public class ChessBoard {
             }
         }
         return lightPieces >= 2;
-            
+
     }
+
     private boolean isMaterialSufficient() {
         return isMaterialSufficient(true) || isMaterialSufficient(false);
-            
+
     }
+
     boolean isGameOver() {
         if (halfMoves >= 50) {
             throw new HalfMovesException();
@@ -209,7 +211,10 @@ public class ChessBoard {
     }
 
     public boolean someoneCanCaptureNoKing(int r, int c, boolean color) {
-        Square s = new Square(r, c);
+        return someoneCanCaptureNoKing(new Square(r, c), color);
+    }
+
+    public boolean someoneCanCaptureNoKing(Square s, boolean color) {
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[0].length; column++) {
                 Piece p = board[row][column];
@@ -360,7 +365,7 @@ public class ChessBoard {
             return false;
         return true;
     }
-    
+
     public void setEnpassant(Square square) {
         this.enPassant = square;
     }

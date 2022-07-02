@@ -84,16 +84,23 @@ public class ExecutionTest {
     }
 
     @Test
+    void impossibleCastling() {
+        ChessBoard c = new ChessBoard("rnbqk1nr/pppp1ppp/8/8/1b6/8/1B5P/RN1QK2R w KQkq - 2 2");
+        assertNull(c.execute(new Castling(7, 4, 7, 6)));
+    }
+
+    @Test
     void rookMovement() {
         ChessBoard c = new ChessBoard("r1bqkbn1/pppp1ppr/2n4p/4p3/2B1P3/5N1P/PPPP1PP1/RNBQK2R w KQq - 1 5");
         c = c.execute(new Move("h1", "h2"));
         assertEquals(new ChessBoard("r1bqkbn1/pppp1ppr/2n4p/4p3/2B1P3/5N1P/PPPP1PPR/RNBQK3 b Qq - 2 5"), c);
     }
+
     @Test
-    void cancelCastlingOnRookCaptured(){
+    void cancelCastlingOnRookCaptured() {
         ChessBoard c = new ChessBoard("r1bqk2r/ppp2Npp/2n5/2bnp3/2B5/8/PPPP1PPP/RNBQK2R w KQkq - 1 7");
-        c = c.execute(new Move("f7","h8"));
+        c = c.execute(new Move("f7", "h8"));
         assertEquals(new ChessBoard("r1bqk2N/ppp3pp/2n5/2bnp3/2B5/8/PPPP1PPP/RNBQK2R b KQq - 0 7"), c);
     }
-    
+
 }
