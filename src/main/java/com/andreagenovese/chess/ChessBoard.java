@@ -1,8 +1,13 @@
 package com.andreagenovese.chess;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import com.andreagenovese.chess.Exceptions.CheckMateException;
+import com.andreagenovese.chess.Exceptions.StaleMateException;
+import com.andreagenovese.chess.Exceptions.HalfMovesException;
 import com.andreagenovese.chess.Moves.Move;
 import com.andreagenovese.chess.Moves.Promotion;
 import com.andreagenovese.chess.Pieces.King;
@@ -27,9 +32,11 @@ public class ChessBoard {
     public Square getEnPassant() {
         return enPassant;
     }
-    public void setHalfMoves(short halfMoves){
+
+    public void setHalfMoves(short halfMoves) {
         this.halfMoves = halfMoves;
     }
+
     public void removeCastling(boolean color, boolean kingSide) {
         if (color) {
             if (kingSide) {
@@ -45,8 +52,9 @@ public class ChessBoard {
             }
         }
     }
+
     public void removeCastling(boolean color) {
-        if(color) {
+        if (color) {
             whiteKingCastling = false;
             whiteQueenCastling = false;
         } else {
@@ -54,6 +62,7 @@ public class ChessBoard {
             blackQueenCastling = false;
         }
     }
+
     public boolean whiteKingCastling() {
         return whiteKingCastling;
     }
@@ -68,6 +77,31 @@ public class ChessBoard {
 
     public boolean blackQueenCastling() {
         return blackQueenCastling;
+    }
+
+    private boolean isGameOver() throws StaleMateException, CheckMateException, HalfMovesException {
+        if(halfMoves >= 50) {
+            throw new HalfMovesException();
+        }
+        for (Piece[] row : board) {
+            for (Piece p : row) {
+                if (p == null || p.isWhite() != isWhiteTurn) {
+                    continue;
+                }
+                Set<Move> moves = p.getMoves();
+                for(Move m : moves) {
+                    ChessBoard clone = clone();
+                    if(clone.execute(m) != null){
+                        return false;
+                    }
+                }
+            }
+        }
+        if(someoneCanCapture(getKing(isWhiteTurn), !isWhiteTurn)){
+            throw new CheckMateException(!isWhiteTurn);
+        } else{
+            throw new StaleMateException();
+        }
     }
 
     public ChessBoard execute(Move m) {

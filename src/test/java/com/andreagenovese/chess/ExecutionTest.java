@@ -24,6 +24,13 @@ public class ExecutionTest {
     }
 
     @Test
+    void setEnpassant() {
+        ChessBoard c = new ChessBoard("r1bqkbnr/ppppppp1/2n4p/4P3/8/5N2/PPPP1PPP/RNBQKB1R b KQkq - 0 3");
+        assertEquals(new ChessBoard("r1bqkbnr/ppp1ppp1/2n4p/3pP3/8/5N2/PPPP1PPP/RNBQKB1R w KQkq d6 0 4"),
+                c.execute(new Move("d7", "d5")));
+    }
+
+    @Test
     void enPassant() {
         ChessBoard c = new ChessBoard("rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3");
         assertNull(c.execute(new Move(3, 3, 4, 3)));
@@ -64,21 +71,29 @@ public class ExecutionTest {
         ChessBoard c = new ChessBoard("r1bqkbnr/ppp2ppp/2Bp4/4p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 4");
         assertNull(c.execute(new Move("e8", "d7")));
         assertNull(c.execute(new Move("h7", "h6")));
-        assertEquals(new ChessBoard("r2qkbnr/pppb1ppp/2Bp4/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5"),
+        assertEquals(new ChessBoard("r2qkbnr/pppb1ppp/2Bp4/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 1 5"),
                 c.execute(new Move("c8", "d7")));
     }
 
     @Test
-    void castle(){
+    void castle() {
         ChessBoard c = new ChessBoard("r3kbnr/pppq1ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 6");
         c = c.execute(new Castling(7, 4, 7, 6));
-        assertEquals(new ChessBoard("r3kbnr/pppq1ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 0 6"), c);
-        
+        assertEquals(new ChessBoard("r3kbnr/pppq1ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 6"), c);
+
     }
-    @Test 
-    void rookMovement(){
+
+    @Test
+    void rookMovement() {
         ChessBoard c = new ChessBoard("r1bqkbn1/pppp1ppr/2n4p/4p3/2B1P3/5N1P/PPPP1PP1/RNBQK2R w KQq - 1 5");
-        c = c.execute(new Move("h1","h2"));
+        c = c.execute(new Move("h1", "h2"));
         assertEquals(new ChessBoard("r1bqkbn1/pppp1ppr/2n4p/4p3/2B1P3/5N1P/PPPP1PPR/RNBQK3 b Qq - 2 5"), c);
     }
+    @Test
+    void cancelCastlingOnRookCaptured(){
+        ChessBoard c = new ChessBoard("r1bqk2r/ppp2Npp/2n5/2bnp3/2B5/8/PPPP1PPP/RNBQK2R w KQkq - 1 7");
+        c = c.execute(new Move("f7","h8"));
+        assertEquals(new ChessBoard("r1bqk2N/ppp3pp/2n5/2bnp3/2B5/8/PPPP1PPP/RNBQK2R b KQq - 0 7"), c);
+    }
+    
 }

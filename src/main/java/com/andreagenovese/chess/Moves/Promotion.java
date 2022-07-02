@@ -18,11 +18,6 @@ public class Promotion extends Move {
         super(startRow, startColumn, destRow, destColumn);
         this.promotion = promotion;
     }
-    @Override
-    public boolean isCapture(ChessBoard board) {
-        return true;
-    }
-
     public void execute(ChessBoard board) {
         Piece[][] arr = board.getBoard();
         Piece toMove = arr[start.row()][start.column()];
@@ -39,7 +34,7 @@ public class Promotion extends Move {
         }
 
     }
-
+    
     @Override
     public String toString() {
         return super.toString() + "=" + promotion.getSimpleName();
