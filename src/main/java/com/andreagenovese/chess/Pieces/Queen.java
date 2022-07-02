@@ -13,9 +13,6 @@ public class Queen extends Piece {
     public Queen(boolean isWhite, ChessBoard board, Square square) {
         super(isWhite, board, square);
     }
-    public Queen clone(ChessBoard board){
-        return new Queen(isWhite, board, square);
-    }
     @Override
     public String toString() {
         return isWhite ? "Q" : "q";

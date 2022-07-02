@@ -14,6 +14,7 @@ public class EnPassant extends Move {
     @Override
     public void execute(ChessBoard board){
         board.move(start,dest);
+        board.setEnpassant(null);
         Piece[][] arr = board.getBoard();
         arr[start.row()][dest.column()] = null;
     }

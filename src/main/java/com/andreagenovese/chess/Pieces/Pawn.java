@@ -19,10 +19,6 @@ public class Pawn extends Piece {
         super(isWhite, board, square);
     }
 
-    public Pawn clone(ChessBoard board) {
-        return new Pawn(isWhite, board, square);
-    }
-
     @Override
     public String toString() {
         return isWhite ? "P" : "p";

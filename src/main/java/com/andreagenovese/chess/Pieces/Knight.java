@@ -15,9 +15,6 @@ public class Knight extends Piece {
     public Knight(boolean isWhite, ChessBoard board, Square square) {
         super(isWhite, board, square);
     }
-    public Knight clone(ChessBoard board){
-        return new Knight(isWhite, board,square);
-    }
     @Override
     public String toString() {
         return isWhite ? "N" : "n";

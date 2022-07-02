@@ -1,6 +1,7 @@
 package com.andreagenovese.chess;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Objects;
 
 import com.andreagenovese.chess.Pieces.King;
 import com.andreagenovese.chess.Pieces.Piece;
@@ -40,23 +41,6 @@ public class ChessBoard {
         return blackQueenCastling;
     }
 
-    public boolean isExecutable(Move m) {
-        Piece toMove = getPiece(m.start());
-        // check turn
-        if (toMove.isWhite() != isWhiteTurn) {
-            return false;
-        }
-        // check if the move is possible
-        if (!toMove.getMoves().contains(m)) {
-            return false;
-        }
-        // check if after the move the king is capturable
-        ChessBoard clone = execute(m);
-        if (clone.someoneCanCapture(clone.getKing(toMove.isWhite()), !toMove.isWhite()))
-            return false;
-        return true;
-    }
-
     public ChessBoard execute(Move m) {
         Piece toMove = getPiece(m.start());
         // check turn
@@ -70,18 +54,27 @@ public class ChessBoard {
         ChessBoard clone = clone();
         toMove = clone.getPiece(m.start());
         m.execute(clone);
+        clone.isWhiteTurn = !isWhiteTurn;
+        if (!isWhiteTurn) {
+            clone.moves++;
+        }
 
-
+        if (clone.someoneCanCapture(clone.getKing(toMove.isWhite()), toMove.isWhite())) {
+            return null;
+        }
         return clone;
     }
-    public void move(Piece p, Square s){
+
+    public void move(Piece p, Square s) {
         board[s.row()][s.column()] = p;
         board[p.square().row()][p.square().column()] = null;
         p.square(s);
     }
+
     public void move(Square start, Square dest) {
         move(getPiece(start), dest);
     }
+
     public Piece getPiece(Square s) {
         return board[s.row()][s.column()];
     }
@@ -195,6 +188,7 @@ public class ChessBoard {
     public String toString() {
         String str = "Turno: ";
         str += isWhiteTurn ? "bianco" : "nero";
+        str += "\nenPassant: "+enPassant;
         str += "\n arrocco: ";
         str += whiteKingCastling + "\n";
         str += whiteQueenCastling + "\n";
@@ -215,9 +209,64 @@ public class ChessBoard {
 
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (blackKingCastling ? 1231 : 1237);
+        result = prime * result + (blackQueenCastling ? 1231 : 1237);
+        result = prime * result + Arrays.deepHashCode(board);
+        result = prime * result + ((enPassant == null) ? 0 : enPassant.hashCode());
+        result = prime * result + halfMoves;
+        result = prime * result + (isWhiteTurn ? 1231 : 1237);
+        result = prime * result + moves;
+        result = prime * result + (whiteKingCastling ? 1231 : 1237);
+        result = prime * result + (whiteQueenCastling ? 1231 : 1237);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ChessBoard other = (ChessBoard) obj;
+        if (blackKingCastling != other.blackKingCastling)
+            return false;
+        if (blackQueenCastling != other.blackQueenCastling)
+            return false;
+        if (!Arrays.deepEquals(board, other.board))
+            return false;
+        if (enPassant == null) {
+            if (other.enPassant != null)
+                return false;
+        } else if (!enPassant.equals(other.enPassant))
+            return false;
+        if (halfMoves != other.halfMoves)
+            return false;
+        if (isWhiteTurn != other.isWhiteTurn)
+            return false;
+        if (moves != other.moves)
+            return false;
+        if (whiteKingCastling != other.whiteKingCastling)
+            return false;
+        if (whiteQueenCastling != other.whiteQueenCastling)
+            return false;
+        return true;
+    }
+
     public static void main(String[] args) {
-        ChessBoard c = new ChessBoard("1k6/8/8/8/8/8/3PPPPP/4K2R b kq e4 0 1");
-        Set<Move> moves = c.getPiece(7, 4).getMoves();
-        System.out.println(moves);
+        ChessBoard c = new ChessBoard("1k6/8/8/8/3pP3/8/8/2K5 b - e3 0 1");
+		c.execute(new EnPassant(4, 3, 5, 4));
+        
+        boolean b = Objects.equals(new ChessBoard("1k6/8/8/8/8/4p3/8/2K5 w - - 0 2"), c);
+        System.out.println(b);
+    }
+
+    public void setEnpassant(Square square) {
+        this.enPassant = square;
     }
 }

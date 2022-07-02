@@ -13,10 +13,6 @@ public class King extends Piece {
         super(isWhite, board, row, column);
     }
 
-    public King clone(ChessBoard board) {
-        return new King(isWhite, board, square);
-    }
-
     @Override
     public String toString() {
         return isWhite ? "K" : "k";

@@ -1,5 +1,8 @@
 package com.andreagenovese.chess;
 
+import com.andreagenovese.chess.Pieces.Pawn;
+import com.andreagenovese.chess.Pieces.Piece;
+
 public class Move {
         protected Square start;
         protected Square dest;
@@ -13,13 +16,15 @@ public class Move {
                 this.start = start;
                 this.dest = dest;
         }
+
         public Move(Square start, int destRow, int destColumn) {
                 this(start, new Square(destRow, destColumn));
         }
-        public Square start(){
+
+        public Square start() {
                 return start;
         }
-        
+
         @Override
         public int hashCode() {
                 final int prime = 31;
@@ -56,8 +61,15 @@ public class Move {
         }
 
         public void execute(ChessBoard board) {
-                board.move(start,dest);
+                // TODO implementing castling cancellation
+                Piece p = board.getPiece(start);
+                if (p instanceof Pawn && Math.abs(start.row() - dest.row()) == 2) {
+                        Square enPassant = new Square(start.row() + (p.isWhite() ? -1 : 1), start.column());
+                        board.setEnpassant(enPassant);
+                } else{
+                        board.setEnpassant(null);
+                }
+                board.move(p, dest);
         }
-
 
 }

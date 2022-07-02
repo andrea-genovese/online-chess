@@ -8,10 +8,6 @@ import com.andreagenovese.chess.Square;
 
 public class Rook extends Piece {
 
-    public Rook clone(ChessBoard board) {
-        return new Rook(isWhite, board, square);
-    }
-
     public Rook(boolean isWhite, ChessBoard board, Square square) {
         super(isWhite, board, square);
     }

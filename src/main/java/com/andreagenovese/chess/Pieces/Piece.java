@@ -1,5 +1,6 @@
 package com.andreagenovese.chess.Pieces;
 
+import java.lang.reflect.Constructor;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,7 +23,16 @@ public abstract class Piece {
         this(isWhite, board, new Square(row, column));
     }
 
-    public abstract Piece clone(ChessBoard board);
+    public final Piece clone(ChessBoard board) {
+        try {
+            Constructor<? extends Piece> constructor = getClass().getConstructor(boolean.class, ChessBoard.class,
+                    Square.class);
+            return constructor.newInstance(isWhite, board, square);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static Piece fromChar(char c, ChessBoard board, int row, int column) {
         boolean isWhite = Character.isUpperCase(c);
@@ -146,4 +156,33 @@ public abstract class Piece {
     public void square(Square square) {
         this.square = square;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (isWhite ? 1231 : 1237);
+        result = prime * result + ((square == null) ? 0 : square.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Piece other = (Piece) obj;
+        if (isWhite != other.isWhite)
+            return false;
+        if (square == null) {
+            if (other.square != null)
+                return false;
+        } else if (!square.equals(other.square))
+            return false;
+        return true;
+    }
+    
 }
