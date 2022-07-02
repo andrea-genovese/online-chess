@@ -1,5 +1,7 @@
 package com.andreagenovese.chess;
 
+import java.lang.reflect.Constructor;
+
 import com.andreagenovese.chess.Pieces.Piece;
 
 public class Promotion extends Move {
@@ -13,6 +15,22 @@ public class Promotion extends Move {
     public Promotion(int startRow, int startColumn, int destRow, int destColumn, Class<? extends Piece> promotion) {
         super(startRow, startColumn, destRow, destColumn);
         this.promotion = promotion;
+    }
+
+    public void execute(ChessBoard board) {
+        Piece[][] arr = board.getBoard();
+        Piece toMove = arr[start.row()][start.column()];
+
+        try {
+            Constructor<? extends Piece> constructor = promotion.getConstructor(Square.class, ChessBoard.class,
+                    boolean.class);
+            Piece p = constructor.newInstance(dest, board, toMove.isWhite());
+            arr[dest.row()][dest.column()] = p;
+            arr[start.row()][start.column()] = null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

@@ -74,7 +74,14 @@ public class ChessBoard {
 
         return clone;
     }
-
+    public void move(Piece p, Square s){
+        board[s.row()][s.column()] = p;
+        board[p.square().row()][p.square().column()] = null;
+        p.square(s);
+    }
+    public void move(Square start, Square dest) {
+        move(getPiece(start), dest);
+    }
     public Piece getPiece(Square s) {
         return board[s.row()][s.column()];
     }
