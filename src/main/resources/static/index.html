@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess App</title>
+    <script src="index.js"></script>
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+</head>
+
+<body>
+    <h1>Chess</h1>
+    <button onclick="createGame()">Create Game</button>
+    <button onclick="connect()">Connect</button>
+    <button onclick="move()">Move</button>
+    <button onclick="disconnect()">Disconnect</button>
+    <p id="data"></p>
+</body>
+</html>

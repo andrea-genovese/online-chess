@@ -134,9 +134,9 @@ public class ChessBoard {
     }
 
     public ChessBoard execute(Move m) throws StaleMateException, CheckMateException, HalfMovesException {
-        Piece toMove = getPiece(m.start());
+        Piece toMove = getPiece(m.start());        
         // check turn
-        if (toMove.isWhite() != isWhiteTurn) {
+        if (toMove == null || toMove.isWhite() != isWhiteTurn) {
             return null;
         }
         // check if the move is possible
@@ -264,7 +264,7 @@ public class ChessBoard {
     public ChessBoard() {
 
     }
-
+    
     private Piece[][] boardFromString(String position) {
         String[] rows = position.split("/");
         Piece[][] board = new Piece[8][];

@@ -40,7 +40,7 @@ public class King extends Piece {
         boolean kingSide = isWhite ? board.whiteKingCastling() : board.blackKingCastling();
         boolean queenSide = isWhite ? board.whiteQueenCastling() : board.blackQueenCastling();
         int castleRow = isWhite ? 7 : 0;
-        //TODO controllare prima di arroccare di non essere sotto scacco
+        
         if(board.someoneCanCaptureNoKing(square, !isWhite)){
             return moves;
         }
