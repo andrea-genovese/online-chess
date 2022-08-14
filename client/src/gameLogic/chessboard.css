@@ -1,0 +1,16 @@
+body{
+    margin:0;
+}
+.chessboard{
+    display: flex;
+    flex-direction: column;
+    height: 80vw;
+    width: 80vw;
+    max-height: 100vh;
+    max-width: 100vh;
+    
+    
+}
+.board-row{
+    display:flex;
+}

@@ -1,0 +1,18 @@
+.square{
+    height: 100%;
+    width: 12.5%;
+    background-color: white;
+}
+.board-row{
+    height: 100%;
+}
+.white {
+    background-color: white;
+}
+
+.black {
+    background-color: rgb(11, 86, 0);
+}
+.piece{
+    height: 100%;
+}
