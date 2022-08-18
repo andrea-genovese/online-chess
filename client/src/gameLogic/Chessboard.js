@@ -1,14 +1,20 @@
 import { Component } from "react"
 import Square from "../components/Square"
 import "./chessboard.css"
-import Piece from "../components/Piece"
+import King from "./Pieces/King"
+import Queen from "./Pieces/Queen"
+import Rook from "./Pieces/Rook"
+import Knight from "./Pieces/Knight"
+import Bishop from "./Pieces/Bishop"
+import Pawn from "./Pieces/Pawn"
+
 export default class Chessboard extends Component {
     constructor(props) {
         super(props)
         let board = this.fenToArr(this.props.fen)
-        console.log(board)
         this.state = {
-            board
+            board,
+            highlighted: []
         }
 
     }
@@ -17,6 +23,14 @@ export default class Chessboard extends Component {
         const arr = fen.split(" ");
         const position = arr[0]
         return this.boardFromString(position);
+    }
+    highlight = (row, col) => {
+        this.setState(prevState => {
+            const highlighted = prevState.highlighted
+            highlighted.push({row, col})
+            console.log(highlighted.toString());
+            return {highlighted}
+        })
     }
     boardFromString(position) {
         const rows = position.split("/");
@@ -30,11 +44,11 @@ export default class Chessboard extends Component {
         return board;
     }
     rowFromString(rowStr, rowIndex) {
-        let row = [null, null, null, null, null, null, null, null];
+        const row = [null, null, null, null, null, null, null, null];
         let column = 0;
         for (let i = 0; i < rowStr.length; i++) {
-            let c = rowStr.charAt(i);
-            let cVal = parseInt(c)
+            const c = rowStr.charAt(i);
+            const cVal = parseInt(c)
             if (!isNaN(cVal)) {
                 column += cVal;
                 continue;
@@ -48,20 +62,27 @@ export default class Chessboard extends Component {
         let isWhite = char <= 'Z'
         char = char.toUpperCase()
         switch (char) {
-            case 'K': return <Piece type="king" isWhite={isWhite} />
-            case 'Q': return <Piece type="queen" isWhite={isWhite} />
-            case 'R': return <Piece type="rook" isWhite={isWhite} />
-            case 'N': return <Piece type="knight" isWhite={isWhite} />
-            case 'B': return <Piece type="bishop" isWhite={isWhite} />
-            case 'P': return <Piece type="pawn" isWhite={isWhite} />
+            case 'K': return <King isWhite={isWhite} row={row} column={col} board={this} highlight={this.highlight} />
+            case 'Q': return <Queen isWhite={isWhite} row={row} column={col} board={this} highlight={this.highlight} />
+            case 'R': return <Rook isWhite={isWhite} row={row} column={col} board={this} highlight={this.highlight} />
+            case 'N': return <Knight isWhite={isWhite} row={row} column={col} board={this} highlight={this.highlight} />
+            case 'B': return <Bishop isWhite={isWhite} row={row} column={col} board={this} highlight={this.highlight} />
+            case 'P': return <Pawn isWhite={isWhite} row={row} column={col} board={this} highlight={this.highlight} />
         }
     }
     render() {
-        const rows = this.state.board.map((row, index) => {
-            return <div className="board-row" key={index}>
-                {row.map((piece, col) => { return <Square key={col} piece={piece} row={index} col={col} /> })}
+        const rows = this.state.board.map((squares, row) => {
+            return <div className="board-row" key={row}>
+                {squares.map((piece, col) => {
+                    return <Square key={col}
+                        piece={piece}
+                        row={row}
+                        col={col}
+                        highlighted={this.state.highlighted.findIndex(val => val.row === row && val.col === val.col) != -1} />
+                })}
             </div>
         })
+
         return <div className="chessboard">
             {rows}
         </div>

@@ -16,3 +16,6 @@
 .piece{
     height: 100%;
 }
+.highlighted{
+    background-color: pink;
+}
